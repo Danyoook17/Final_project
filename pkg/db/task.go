@@ -6,6 +6,9 @@ import (
 	"strconv"
 )
 
+const defaultTasksLimit = 50
+
+
 
 type Task struct {
 	ID      string `json:"id"`
@@ -30,7 +33,7 @@ func AddTask(task *Task) (int64, error) {
 
 func Tasks(limit int) ([]*Task, error) {
 	if limit <= 0 {
-		limit = 50
+		limit = defaultTasksLimit
 	}
 
 	rows, err := DB.Query(`

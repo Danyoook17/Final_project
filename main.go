@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+
 	"todoapp/pkg/api"
 	"todoapp/pkg/db"
 )
@@ -15,16 +16,20 @@ func main() {
 		port = p
 	}
 
-	// Путь к БД
 	dbFile := "scheduler.db"
 	if v := os.Getenv("TODO_DBFILE"); v != "" {
 		dbFile = v
 	}
 
-	// Инициализация БД
 	if err := db.Init(dbFile); err != nil {
 		log.Fatal(err)
 	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Println("db close error:", err)
+		}
+	}()
+
 	api.Init()
 
 	// Раздача фронта
@@ -33,6 +38,4 @@ func main() {
 
 	log.Println("Server started on port", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
-    log.Fatal(http.ListenAndServe(":"+port, nil))
 }
-

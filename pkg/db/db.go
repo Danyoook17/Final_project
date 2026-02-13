@@ -47,3 +47,9 @@ func Init(dbFile string) error {
 	DB = d
 	return nil
 }
+func Close() error {
+	if DB != nil {
+		return DB.Close()
+	}
+	return nil
+}
